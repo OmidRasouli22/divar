@@ -9,6 +9,7 @@ import compression from "compression";
 
 // main
 import connectDB from "./src/config/db.config.js";
+import swaggerConfig from "./src/config/swagger.config.js";
 
 async function main() {
   const app = express();
@@ -41,6 +42,9 @@ async function main() {
 
   //   connect to database
   await connectDB();
+
+  // config swagger
+  swaggerConfig(app);
 
   // health check api
   app.get("/api/health-check", (req, res) => {
