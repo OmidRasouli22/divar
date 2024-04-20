@@ -9,7 +9,12 @@ import compression from "compression";
 
 // main
 import connectDB from "./src/config/db.config.js";
+import routes from "./src/app.routes.js";
 import swaggerConfig from "./src/config/swagger.config.js";
+import {
+  AllExceptionHandler,
+  NotFoundHandler,
+} from "./src/common/exceptions/error-handler.exception.js";
 
 async function main() {
   const app = express();
@@ -31,12 +36,7 @@ async function main() {
   }
 
   // config cors
-  app.use(
-    cors({
-      credentials: true,
-      origin: process.env.CORS_ORIGIN || "",
-    })
-  );
+  app.use(cors());
 
   app.use(cookieParser());
 
@@ -50,9 +50,16 @@ async function main() {
   app.get("/api/health-check", (req, res) => {
     return res.json({
       success: true,
-      message: "API IS RUNNING SUCCESSFULLY ON PORT 5000",
+      message: "API IS RUNNING SUCCESSFULLY ON PORT 3000",
     });
   });
+
+  // config routes
+  app.use("/api", routes);
+
+  // error handler
+  NotFoundHandler(app);
+  AllExceptionHandler(app);
 
   const port = process.env.PORT || 3001;
   app.listen(port, () => {

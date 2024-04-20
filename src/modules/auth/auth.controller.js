@@ -1,25 +1,22 @@
-import userService from "../user/user.service.js";
 import AuthMessages from "./auth.messages.js";
 import authService from "./auth.service.js";
 import autoBind from "auto-bind";
 
 class AuthController {
   #service;
-  #userService;
 
   constructor() {
     autoBind(this);
     this.#service = authService;
-    this.#userService = userService;
   }
 
   async sendOTP(req, res, next) {
     try {
       const { mobile } = req.body;
       await this.#service.sendOTP(mobile);
-      return {
+      return res.json({
         message: AuthMessages.SendOTPSuccessfully,
-      };
+      });
     } catch (error) {
       next(error);
     }
@@ -39,5 +36,5 @@ class AuthController {
     }
   }
 }
-
-export default new AuthController();
+const authController = new AuthController();
+export default authController;
