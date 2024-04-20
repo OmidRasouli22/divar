@@ -38,7 +38,7 @@ async function main() {
   // config cors
   app.use(cors());
 
-  app.use(cookieParser());
+  app.use(cookieParser(process.env.COOKIE_PARSER_SECRET_KEY));
 
   //   connect to database
   await connectDB();

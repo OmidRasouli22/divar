@@ -2,6 +2,7 @@ import AuthMessages from "./auth.messages.js";
 import authService from "./auth.service.js";
 import autoBind from "auto-bind";
 
+import cookieConfigs from "../../config/cookies.configs.js";
 class AuthController {
   #service;
 
@@ -24,6 +25,17 @@ class AuthController {
 
   async checkOTP(req, res, next) {
     try {
+      const { code, mobile } = req.body;
+      const accessToken = await this.#service.checkOTP(mobile, code);
+
+      return res
+        .cookie("access_token", accessToken, {
+          ...cookieConfigs,
+        })
+        .status(200)
+        .json({
+          message: AuthMessages.LoginSuccessfully,
+        });
     } catch (error) {
       next(error);
     }

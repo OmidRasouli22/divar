@@ -4,6 +4,7 @@ import createHttpError from "http-errors";
 import AuthMessages from "./auth.messages.js";
 import { randomInt } from "crypto";
 
+import { signToken } from "../../common/utils/token.js";
 class AuthService {
   #model;
   constructor() {
@@ -26,7 +27,7 @@ class AuthService {
       return newUser;
     }
 
-    if (user.otp && user.otp.expiresIn > now) {
+    if (user.otp && user.otp.expiresIn > now && !user.otp.isUsed) {
       throw new createHttpError.BadRequest(AuthMessages.OTPCodeNotExpired);
     }
 
@@ -36,7 +37,32 @@ class AuthService {
     return user;
   }
 
-  async checkOTP(mobile, code) {}
+  async checkOTP(mobile, code) {
+    const user = await this.checkIfUserExistByMobile(mobile);
+    if (user.otp && user.otp.code !== code) {
+      throw new createHttpError.BadRequest(AuthMessages.OtpCodeIsNotCorrect);
+    }
+
+    const now = new Date().getTime();
+    if (user.otp.expiresIn < now) {
+      throw new createHttpError.BadRequest(AuthMessages.OtpCodeExpired);
+    }
+
+    if (user.otp.isUsed) {
+      throw new createHttpError(AuthMessages.OtpCodeAlreadyUsed);
+    }
+
+    if (!user.verifiedMobile) {
+      user.verifiedMobile = true;
+    }
+
+    const accessToken = signToken({ _id: user._id });
+    user.accessToken = accessToken;
+    user.otp.isUsed = true;
+
+    await user.save();
+    return accessToken;
+  }
 
   async logout() {}
 
