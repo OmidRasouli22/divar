@@ -4,6 +4,7 @@
  *  name: Authentication
  *  description: Auth module
  */
+
 /**
  * @swagger
  *  components:
