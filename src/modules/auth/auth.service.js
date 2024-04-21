@@ -64,8 +64,6 @@ class AuthService {
     return accessToken;
   }
 
-  async logout() {}
-
   async checkIfUserExistByMobile(mobile) {
     const user = await this.#model.findOne({ mobile });
     if (!user) {
