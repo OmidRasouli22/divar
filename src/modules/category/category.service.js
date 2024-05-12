@@ -48,7 +48,29 @@ class CategoryService {
     return category;
   }
 
-  async findAll() {}
+  async findAll() {
+    return await this.#model.find({ parent: { $exists: false } });
+  }
+
+  async remove(id) {
+    await this.checkExistById(id);
+    // await this.#optionModel.deleteMany({ category: id }).then(async () => {
+    //   await this.#model.deleteMany({ _id: id });
+    // });
+    await this.#model.deleteOne({ _id: id });
+    return true;
+  }
+
+  async checkExistById(id) {
+    const category = await this.#model.findById(id);
+    if (!category) throw new createHttpError.NotFound(CategoryMessage.NotFound);
+    return category;
+  }
+  async checkExistBySlug(slug) {
+    const category = await this.#model.findOne({ slug });
+    if (!category) throw new createHttpError.NotFound(CategoryMessage.NotFound);
+    return category;
+  }
 }
 
 export default new CategoryService();
