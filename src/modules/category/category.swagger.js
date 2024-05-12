@@ -41,3 +41,28 @@
  *          201:
  *              description: created
  */
+/**
+ * @swagger
+ * /category:
+ *  get:
+ *      summary: get all categories
+ *      tags:
+ *          -   Category
+ *      responses:
+ *          200:
+ *              description: successfully
+ */
+/**
+ * @swagger
+ * /category/{id}:
+ *  delete:
+ *      summary: get single category with given id
+ *      tags:
+ *          -   Category
+ *      parameters:
+ *          -   in: path
+ *              name: id
+ *      responses:
+ *          200:
+ *              description: successfully
+ */

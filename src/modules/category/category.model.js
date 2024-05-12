@@ -52,7 +52,7 @@ function autoPopulate(next) {
   this.populate([{ path: "children" }]);
   next();
 }
-CategorySchema.pre("find", autoPopulate).pre("findOne", autoPopulate);
+categorySchema.pre("find", autoPopulate).pre("findOne", autoPopulate);
 
 const Category = model("Category", categorySchema);
 export default Category;
