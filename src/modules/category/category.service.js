@@ -49,7 +49,7 @@ class CategoryService {
   }
 
   async findAll() {
-    return await this.#model.find({ parent: { $exists: false } });
+    return await this.#model.find({ parent: { $eq: null } });
   }
 
   async remove(id) {
@@ -63,12 +63,12 @@ class CategoryService {
 
   async checkExistById(id) {
     const category = await this.#model.findById(id);
-    if (!category) throw new createHttpError.NotFound(CategoryMessage.NotFound);
+    if (!category) throw new createHttpError.NotFound("category not found");
     return category;
   }
   async checkExistBySlug(slug) {
     const category = await this.#model.findOne({ slug });
-    if (!category) throw new createHttpError.NotFound(CategoryMessage.NotFound);
+    if (!category) throw new createHttpError.NotFound("category not found");
     return category;
   }
 }

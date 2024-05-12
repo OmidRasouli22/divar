@@ -35,7 +35,7 @@
 
 /**
  * @swagger
- * /option/create:
+ * /api/option/create:
  *  post:
  *      summary: create new option
  *      tags:
@@ -55,7 +55,7 @@
 
 /**
  * @swagger
- * /option/category/{categoryId}:
+ * /api/option/category/{categoryId}:
  *  get:
  *      summary: get options for one category
  *      tags:
@@ -71,7 +71,23 @@
 
 /**
  * @swagger
- * /option/{optionId}:
+ * /api/option/category-slug/{categorySlug}:
+ *  get:
+ *      summary: get options for one category slug
+ *      tags:
+ *          -   Option
+ *      parameters:
+ *          -   in: path
+ *              name: categorySlug
+ *              type: string
+ *      responses:
+ *          200:
+ *              description: OK
+ */
+
+/**
+ * @swagger
+ * /api/option/{optionId}:
  *  get:
  *      summary: get information for one option
  *      tags:
@@ -87,7 +103,7 @@
 
 /**
  * @swagger
- * /option/all:
+ * /api/option/all:
  *  get:
  *      summary: get all options
  *      tags:

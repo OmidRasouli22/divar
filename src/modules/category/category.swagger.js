@@ -24,7 +24,7 @@
 
 /**
  * @swagger
- * /category/create:
+ * /api/category/create:
  *  post:
  *      summary: create new category
  *      tags:
@@ -43,7 +43,7 @@
  */
 /**
  * @swagger
- * /category:
+ * /api/category:
  *  get:
  *      summary: get all categories
  *      tags:
@@ -54,7 +54,7 @@
  */
 /**
  * @swagger
- * /category/{id}:
+ * /api/category/{id}:
  *  delete:
  *      summary: get single category with given id
  *      tags:

@@ -10,6 +10,11 @@ router.get(
   "/category/:categoryId",
   optionController.getAllOptionsForOneCategory
 );
-router.get("/:optionId", optionController.findById);
+router.get(
+  "/category-slug/:categorySlug",
+  optionController.findOptionsByCategorySlug
+);
 router.get("/all", optionController.allOptions);
+router.get("/:optionId", optionController.findById);
+router.delete("/:optionId", optionController.remove);
 export default router;
