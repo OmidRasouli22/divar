@@ -6,10 +6,12 @@ import cookieParser from "cookie-parser";
 import morgan from "morgan";
 import mongoSanitize from "express-mongo-sanitize";
 import compression from "compression";
+import expressLayouts from "express-ejs-layouts";
 
 // main
 import connectDB from "./src/config/db.config.js";
-import routes from "./src/app.routes.js";
+import apiRoutes from "./src/api.routes.js";
+import appRoutes from "./src/app.routes.js";
 import swaggerConfig from "./src/config/swagger.config.js";
 import {
   AllExceptionHandler,
@@ -46,6 +48,12 @@ async function main() {
   // config swagger
   swaggerConfig(app);
 
+  app.use(express.static("public"));
+  app.use(expressLayouts);
+  app.set("view engine", "ejs");
+  app.set("views", "./src/views");
+  app.set("layout", "./layouts/panel/main.ejs");
+
   // health check api
   app.get("/api/health-check", (req, res) => {
     return res.json({
@@ -55,7 +63,8 @@ async function main() {
   });
 
   // config routes
-  app.use("/api", routes);
+  app.use(appRoutes);
+  app.use("/api", apiRoutes);
 
   // error handler
   NotFoundHandler(app);

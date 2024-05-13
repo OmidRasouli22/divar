@@ -27,6 +27,8 @@
  *                      enum: [number, string, array, boolean]
  *                  guide:
  *                      type: string
+ *                  required:
+ *                      type: boolean
  *                  enum:
  *                      type: array
  *                      items:

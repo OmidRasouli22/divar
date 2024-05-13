@@ -1,14 +1,18 @@
 import autoBind from "auto-bind";
 import Category from "./category.model.js";
+import Option from "../option/option.model.js";
 import createHttpError from "http-errors";
 import { isValidObjectId, Types } from "mongoose";
 import slugify from "slugify";
 
 class CategoryService {
   #model;
+  #optionModel;
+
   constructor() {
     autoBind(this);
     this.#model = Category;
+    this.#optionModel = Option;
   }
 
   async createCategory(CreateCategotyDTO) {
@@ -54,9 +58,9 @@ class CategoryService {
 
   async remove(id) {
     await this.checkExistById(id);
-    // await this.#optionModel.deleteMany({ category: id }).then(async () => {
-    //   await this.#model.deleteMany({ _id: id });
-    // });
+    await this.#optionModel.deleteMany({ category: id }).then(async () => {
+      await this.#model.deleteMany({ _id: id });
+    });
     await this.#model.deleteOne({ _id: id });
     return true;
   }

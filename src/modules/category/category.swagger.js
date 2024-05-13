@@ -56,7 +56,7 @@
  * @swagger
  * /api/category/{id}:
  *  delete:
- *      summary: get single category with given id
+ *      summary: delete one category with given id and its related options
  *      tags:
  *          -   Category
  *      parameters:

@@ -11,7 +11,15 @@ class OptionController {
 
   async create(req, res, next) {
     try {
-      const { title, key, type, guide, enum: list, category } = req.body;
+      const {
+        title,
+        key,
+        type,
+        guide,
+        enum: list,
+        category,
+        required,
+      } = req.body;
       // TODO: Validation here
       const newOption = await this.#service.create({
         title,
@@ -20,6 +28,7 @@ class OptionController {
         guide,
         enum: list,
         category,
+        required,
       });
       return res.status(201).json({
         message: "Option created successfully",

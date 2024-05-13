@@ -1,6 +1,7 @@
 import autoBind from "auto-bind";
 import Option from "../option/option.model.js";
 import categoryService from "../category/category.service.js";
+import { isTrue, isFalse } from "../../common/utils/functions.js";
 
 import createHttpError from "http-errors";
 import { isValidObjectId } from "mongoose";
@@ -17,7 +18,15 @@ class OptionService {
   }
 
   async create(createOptionDTO) {
-    let { title, key, type, guide, enum: list, category } = createOptionDTO;
+    let {
+      title,
+      key,
+      type,
+      guide,
+      enum: list,
+      category,
+      required,
+    } = createOptionDTO;
     if (!category || !isValidObjectId(category)) {
       throw new createHttpError.BadRequest("invalid category");
     }
@@ -40,6 +49,10 @@ class OptionService {
       list = [];
     }
 
+    if (isTrue(required)) required = true;
+    else if (isFalse(required)) required = false;
+    else required = false;
+
     const newOption = await this.#optionModel.create({
       title,
       key,
@@ -47,6 +60,7 @@ class OptionService {
       guide,
       enum: list,
       category,
+      required,
     });
     return newOption;
   }
