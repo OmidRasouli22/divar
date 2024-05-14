@@ -29,12 +29,13 @@ class CategoryService {
       const category = await this.#model.findById(parent);
       if (!category)
         throw new createHttpError.NotFound("parent id is not valid");
+
       parents = [
         ...new Set(
-          [category._id.toString()].concat(
-            category.parents.map((id) => id.toString())
-          )
-        ).map((id) => new Types.ObjectId(id)),
+          [category._id.toString()]
+            .concat(category?.parents?.map((id) => id.toString()))
+            .map((id) => new Types.ObjectId(id))
+        ),
       ];
     }
 
@@ -44,9 +45,9 @@ class CategoryService {
         lower: true,
         trim: true,
       }),
-      parent: parent ? parent : null,
+      parent: parent.trim().length > 0 ? parent : null,
       icon,
-      parents,
+      parents: parents ?? [],
     });
 
     return category;
