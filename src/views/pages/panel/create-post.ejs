@@ -1,13 +1,15 @@
 <div class="col-lg-12 d-flex align-items-stretch">
   <div class="card w-100">
+    <% if(showBackBtn) {%>
     <div class="p-3">
-      <% if(showBackBtn) {%>
-      <div class="p-3">
-        <a href="/post/create" class="btn btn-danger"
-          >بازگشت به همه ی دسته بندی ها</a
-        >
-      </div>
-      <% } %> <% if(categories && categories.length > 0) { %>
+      <a href="/post/create" class="btn btn-danger"
+        >بازگشت به همه ی دسته بندی ها</a
+      >
+    </div>
+    <% } %>
+
+    <div class="p-3">
+      <% if(!options) {%> <% if(categories && categories.length > 0) { %>
       <ul>
         <% categories.forEach(category => { %>
         <li>
@@ -15,13 +17,81 @@
             href="/post/create?slug=<%= category.slug %>"
             class="w-100 p-3 d-block bg-light text-dark"
           >
-            <span class="ti ti-users nav-small-cap-icon fs-4"> </span>
+            <span class="ti ti-users nav-small-cap-icon fs-4"></span>
             <span><%= category.name %></span>
           </a>
         </li>
         <% }) %>
       </ul>
-      <% } %>
+
+      <% } %> <%}else {%>
+      <div class="mt-3 p-1">
+        <label for="title">عنوان آگهی</label>
+        <input
+          type="text"
+          class="form-control"
+          name="title"
+          id="title"
+          required
+        />
+      </div>
+      <div class="mt-3 p-1">
+        <label for="content">توضیحات آگهی</label>
+        <textarea
+          class="form-control"
+          name="content"
+          id="content"
+          rows="4"
+        ></textarea>
+      </div>
+      <div class="mt-3 p-1">
+        <label for="images"
+          >عکس آگهی (تا 5 تا عکس می توانید برای اگهی اپلود کنید)</label
+        >
+        <input
+          type="file"
+          class="form-control"
+          name="images"
+          id="images"
+          multiple
+        />
+      </div>
+      <% options.forEach(option => { %>
+      <div class="mt-3 p-1">
+        <label for="<%= option.key %>"
+          ><%= option.title %><%= option.required ? " (*) " : "" %></label
+        >
+        <% if(option.type === "array") {%>
+        <select
+          name="<%= option.key %>"
+          id="<%= option.key %>"
+          class="form-control"
+          <%= option.required ? "required" : "" %>
+        >
+          <% option.enum.forEach(val => {%>
+          <option value="<%= val %>"><%= val %></option>
+          <%}) %>
+        </select>
+        <%}else if(option.type === "boolean") { %>
+        <select
+          name="<%= option.key %>"
+          id="<%= option.key %>"
+          class="form-control"
+          <%= option.required ? "required" : "" %>
+        >
+          <option value="0">ندارد</option>
+          <option value="1">دارد</option>
+        </select>
+        <% } else {%>
+        <input
+          type="text"
+          name="<%= option.key %>"
+          class="form-control"
+          placeholder="<%= option.guide %>"
+          <%= option.required ? "required" : "" %>
+        />
+        <%} %> <%}) %> <%} %>
+      </div>
     </div>
   </div>
 </div>

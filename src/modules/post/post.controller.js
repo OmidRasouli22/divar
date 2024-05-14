@@ -21,6 +21,7 @@ class PostController {
       let showBackBtn = false;
       let categories = [];
       let match = { parent: null };
+      let options = [];
 
       if (slug && slug.trim().length > 0) {
         slug = slug.trim();
@@ -30,6 +31,7 @@ class PostController {
           parent: category._id,
         };
         showBackBtn = true;
+        options = await this.#service.getSpecificCategoryOptions(category._id);
       }
 
       categories = await this.#categoryModel.aggregate([
@@ -40,6 +42,7 @@ class PostController {
       res.render("./pages/panel/create-post.ejs", {
         categories,
         showBackBtn,
+        options: options.length === 0 ? null : options,
       });
     } catch (err) {
       console.log(err);
