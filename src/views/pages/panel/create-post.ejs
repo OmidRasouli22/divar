@@ -25,6 +25,11 @@
       </ul>
 
       <% } %> <%}else {%>
+        <form action="/post/create" method="post" enctype="multipart/form-data">
+
+        <input type="hidden" name="lat" id="lat">
+        <input type="hidden" name="lng" id="lng">
+   
       <div class="mt-3 p-1">
         <label for="title">عنوان آگهی</label>
         <input
@@ -34,6 +39,10 @@
           id="title"
           required
         />
+      </div>
+      <div class="mt-2 p-2">
+        <labelانتخاب آدرس</label>
+        <div id="map-element" class="w-100" style="height: 300px"></div>
       </div>
       <div class="mt-3 p-1">
         <label for="content">توضیحات آگهی</label>
@@ -92,6 +101,8 @@
         />
         <%} %> <%}) %> <%} %>
       </div>
+    </form>
+
     </div>
   </div>
 </div>
