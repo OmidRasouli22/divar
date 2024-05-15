@@ -1,10 +1,10 @@
 import autoBind from "auto-bind";
 import postService from "./post.service.js";
-import HttpCodes from "http-codes";
 
 import Category from "../category/category.model.js";
 import createHttpError from "http-errors";
 import { Types } from "mongoose";
+import axios from "axios";
 
 class PostController {
   #service;
@@ -56,12 +56,23 @@ class PostController {
   async create(req, res, next) {
     try {
       const { title, content, lat, lng, category } = req.body;
+      // get address
+      const result = await axios.get(
+        `https://map.ir/reverse/no?lat=${lat}&lon=${lng}`,
+        {
+          headers: {
+            "x-api-key": process.env.MAP_API_KEY,
+          },
+        }
+      );
+      console.log(result);
 
       delete req.body["title"];
       delete req.body["content"];
       delete req.body["lat"];
       delete req.body["lng"];
       delete req.body["category"];
+      delete req.body["images"];
 
       const options = req.body;
 
@@ -70,6 +81,10 @@ class PostController {
         content,
         coordinate: [lat, lng],
         category: new Types.ObjectId(category),
+        province: result?.data?.province,
+        city: result?.data?.city,
+        address: result?.data?.address_compact,
+        district: result?.data?.region,
         options,
       });
       return res.status(200).json({

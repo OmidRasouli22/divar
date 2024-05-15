@@ -29,6 +29,11 @@ const postSchema = new mongoose.Schema(
       trim: true,
       required: false,
     },
+    address: {
+      type: String,
+      required: false,
+      trim: true,
+    },
     district: {
       type: String,
       required: false,
