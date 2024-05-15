@@ -31,7 +31,7 @@ const postSchema = new mongoose.Schema(
     },
     district: {
       type: String,
-      required: true,
+      required: false,
     },
     coordinate: {
       type: [Number], // [lat, lan]
@@ -42,6 +42,7 @@ const postSchema = new mongoose.Schema(
       required: false,
       default: [],
     },
+    options: { type: Object, default: {} },
   },
   {
     timestamps: true,

@@ -21,6 +21,11 @@ class PostService {
     });
     return options;
   }
+
+  async createPost(createPostDto) {
+    const newPost = await this.#model.create(createPostDto);
+    return newPost;
+  }
 }
 
 export default new PostService();

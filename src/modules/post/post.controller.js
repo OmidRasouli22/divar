@@ -4,6 +4,7 @@ import HttpCodes from "http-codes";
 
 import Category from "../category/category.model.js";
 import createHttpError from "http-errors";
+import { Types } from "mongoose";
 
 class PostController {
   #service;
@@ -22,10 +23,11 @@ class PostController {
       let categories = [];
       let match = { parent: null };
       let options = [];
+      let category;
 
       if (slug && slug.trim().length > 0) {
         slug = slug.trim();
-        const category = await this.#categoryModel.findOne({ slug });
+        category = await this.#categoryModel.findOne({ slug });
         if (!category) throw new createHttpError.NotFound("invalid slug");
         match = {
           parent: category._id,
@@ -43,6 +45,7 @@ class PostController {
         categories,
         showBackBtn,
         options: options.length === 0 ? null : options,
+        category,
       });
     } catch (err) {
       console.log(err);
@@ -52,8 +55,23 @@ class PostController {
 
   async create(req, res, next) {
     try {
-      const {} = req.body;
-      const newPost = await this.#service.createPost({});
+      const { title, content, lat, lng, category } = req.body;
+
+      delete req.body["title"];
+      delete req.body["content"];
+      delete req.body["lat"];
+      delete req.body["lng"];
+      delete req.body["category"];
+
+      const options = req.body;
+
+      const newPost = await this.#service.createPost({
+        title,
+        content,
+        coordinate: [lat, lng],
+        category: new Types.ObjectId(category),
+        options,
+      });
       return res.status(200).json({
         message: "new post created successfully",
         data: {
