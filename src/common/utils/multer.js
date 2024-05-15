@@ -32,6 +32,4 @@ const upload = multer({
     fileSize: 3 * 1000 * 1000,
   },
 });
-module.exports = {
-  upload,
-};
+export default upload;

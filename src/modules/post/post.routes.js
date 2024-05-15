@@ -4,6 +4,6 @@ import upload from "../../common/utils/multer.js";
 
 const router = Router();
 
-router.post("/create", upload.any(), postController.create);
+router.post("/create", upload.array("images", 10), postController.create);
 
 export default router;

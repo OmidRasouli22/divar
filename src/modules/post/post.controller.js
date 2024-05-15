@@ -4,6 +4,7 @@ import postService from "./post.service.js";
 import Category from "../category/category.model.js";
 import createHttpError from "http-errors";
 import { Types } from "mongoose";
+import utf8 from "utf8";
 import axios from "axios";
 
 class PostController {
@@ -55,6 +56,7 @@ class PostController {
 
   async create(req, res, next) {
     try {
+      const images = req.files?.map((image) => image?.path?.slice(7));
       const { title, content, lat, lng, category } = req.body;
       // get address
       const result = await axios.get(
@@ -65,7 +67,6 @@ class PostController {
           },
         }
       );
-      console.log(result);
 
       delete req.body["title"];
       delete req.body["content"];
@@ -74,11 +75,18 @@ class PostController {
       delete req.body["category"];
       delete req.body["images"];
 
-      const options = req.body;
+      let options = req.body;
+      for (let key in options) {
+        let value = options[key];
+        delete options[key];
+        key = utf8.decode(key);
+        options[key] = value;
+      }
 
       const newPost = await this.#service.createPost({
         title,
         content,
+        images,
         coordinate: [lat, lng],
         category: new Types.ObjectId(category),
         province: result?.data?.province,
